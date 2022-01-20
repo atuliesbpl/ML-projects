@@ -1,0 +1,43 @@
+# Define a function for model training.
+def train_predict(learner, X_train, y_train, X_val, y_val): 
+    '''
+    The function will train the specified ML model on the traindata provided. It will predict the results on the tesdata.
+    inputs:
+       - learner: the learning algorithm to be trained and predicted on
+       - sample_size: the size of samples (number) to be drawn from training set
+       - X_train: features training set
+       - y_train: income training set
+       - X_test: features testing set
+       - y_test: income testing set
+    outputs:
+       - Training time required for the model
+       - Prediction time required for the model
+       - Accuracy score and F1 score.
+    '''
+
+    results = {}
+    from sklearn.metrics import accuracy_score, f1_score
+    # Fit the learner to the training data using slicing with 'sample_size' using .fit(training_features[:], training_labels[:])
+    start = time() # Get start time
+    learner.fit(X_train, y_train)
+    end = time() # Get end time
+
+    # Calculate the training time
+    results['train_time'] = end - start # Model training time in seconds
+
+    # Get the predictions on the test set(X_test),
+    start = time() # Get start time
+    predictions_test = learner.predict(X_val)
+    end = time() # Get end time
+
+    # Calculate the total prediction time
+    results['pred_time'] = end - start # Model prediction time in seconds
+
+    # Compute accuracy on test set using accuracy_score()
+    results['accuracy_score'] = accuracy_score(y_val, predictions_test)
+
+    # Compute f1 score on test set using f1_score()
+    results['f1_score'] = f1_score(y_val, predictions_test,average = 'micro')
+   
+    # Return the results
+    return results
