@@ -1,0 +1,50 @@
+# Define a function for model training.
+def regressor_predict(regressor, X_train, y_train, X_val, y_val): 
+    '''
+    The function will train the specified ML model on the traindata provided. It will predict the results on the tesdata.
+    inputs:
+       - regressor: the learning algorithm to be trained and predicted on
+       - sample_size: the size of samples (number) to be drawn from training set
+       - X_train: features training set
+       - y_train: income training set
+       - X_test: features testing set
+       - y_test: income testing set
+    outputs:
+       - Training time required for the model
+       - Prediction time required for the model
+       - mean_absolute_error, mean_squared_error, root_mean_squared_error,r2_score 
+    '''
+
+    results = {}
+    import time
+    from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score 
+    # Fit the learner to the training data using slicing with 'sample_size' using .fit(training_features[:], training_labels[:])
+    start = time() # Get start time
+    regressor.fit(X_train, y_train)
+    end = time() # Get end time
+
+    # Calculate the training time
+    results['train_time'] = end - start # Model training time in seconds
+
+    # Get the predictions on the test set(X_test),
+    start = time() # Get start time
+    predictions_test = regressor.predict(X_val)
+    end = time() # Get end time
+
+    # Calculate the total prediction time
+    results['pred_time'] = end - start # Model prediction time in seconds
+
+    # Compute MAE on test set using mean_absolute_error()
+    results['MAE'] = mean_absolute_error(y_val, predictions_test)
+
+    # Compute MSE on test set using mean_squared_error()
+    results['MSE'] = mean_squared_error(y_val, predictions_test)
+    
+    # Compute RMSE on test set using root_mean_squared_error()
+    results['RMSE'] = np.sqrt(mean_squared_error(y_val, predictions_test))
+    
+    # Compute R2 on test set using mean_absolute_error()
+    results['R2'] = r2_score(y_val, predictions_test)
+   
+    # Return the results
+    return results
